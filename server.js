@@ -5,12 +5,17 @@ const cors = require('cors');
 
 const schema = buildSchema(`
     type Query {
-        hello: String
+        quoteOfTheDay: String,
+        random: Float!,
+        rollThreeDice: [Int]
     }
 `);
 
 const root = {
-    hello: () => 'Hello world!!'
+    // these are called resolver functions
+    quoteOfTheDay: () => Math.random() < 0.5 ? 'Take it easy' : 'A choice is brief yet unending',
+    random: () => Math.random(),
+    rollThreeDice: () => [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6))
 };
 
 const app = express();
