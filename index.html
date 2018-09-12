@@ -21,71 +21,33 @@
 </head>
 <body>
     <h1>Example Client</h1>
-    <h2>GraphQL Total Result:</h2>
+    <h2>GraphQL Dice Result:</h2>
     <p class="graphql-result">Making request...</p>
-
-    <h2>Query quoteOfTheDay</h2>
-    <p class="quote-result">Making request...</p>
-
-
-    <h2>Query random</h2>
-    <p class="random-result">Making request...</p>
-
-
-    <h2>Query rollThreeDice</h2>
-    <p class="dice-result">Making request...</p>
 
     <script>
         const run = async () => {  
+            const dice = 3;
+            const sides = 6;
+            const query = `query RollDice($dice: Int!, $sides: Int) {
+                rollDice(numDice: $dice, numSides: $sides)
+            }`;
+
             const graphQLInitialResponse = await fetch('http://localhost:4000/graphql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                 },
-                body: JSON.stringify({query: "{ quoteOfTheDay, random, rollThreeDice }"})
+                body: JSON.stringify({
+                    query,
+                    variables: { dice, sides },
+                })
             });
 
             const graphQLResult = await graphQLInitialResponse.json();
             console.log('graphQLResult', graphQLResult);
 
             document.querySelector('.graphql-result').innerText = JSON.stringify(graphQLResult);
-
-            const quoteResponse = await fetch('http://localhost:4000/graphql', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({query: "{ quoteOfTheDay }"})
-            });
-
-            const quoteResult = await quoteResponse.json();
-            document.querySelector('.quote-result').innerText = JSON.stringify(quoteResult);
-
-            const randomResponse = await fetch('http://localhost:4000/graphql', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({query: "{ random }"})
-            });
-
-            const randomResult = await randomResponse.json();
-            document.querySelector('.random-result').innerText = JSON.stringify(randomResult);
-
-            const diceResponse = await fetch('http://localhost:4000/graphql', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({query: "{ rollThreeDice }"})
-            });
-
-            const diceResult = await diceResponse.json();
-            document.querySelector('.dice-result').innerText = JSON.stringify(diceResult);
         };
 
         run();
