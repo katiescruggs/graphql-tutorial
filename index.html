@@ -25,13 +25,14 @@
     <p class="graphql-result">Making request...</p>
 
     <script>
-        const run = async () => {  
-            const query = `{
-                getDie(numSides:6) {
-                    numSides
-                    rollOnce
-                    roll(numRolls:5)
-                }
+        const run = async () => {
+            const author = "Katie";
+            const content = "Quote goes here";
+            const query = `
+                mutation CreateMessage($input: MessageInput) {
+                    createMessage(input: $input) {
+                        id
+                    }
                 }`;
 
             const graphQLInitialResponse = await fetch('http://localhost:4000/graphql', {
@@ -42,6 +43,12 @@
                 },
                 body: JSON.stringify({
                     query,
+                    variables: {
+                        input: {
+                            author,
+                            content
+                        }
+                    }
                 })
             });
 
